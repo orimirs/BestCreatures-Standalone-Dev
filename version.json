@@ -1,0 +1,19 @@
+{
+  "version": "7.64.39",
+  "build": "2026-09-15-standalone-vertical-menu-touch-unification",
+  "environment": "dev",
+  "architecture": "shared-bookmarklet-runtime",
+  "runtimeSource": "bajsas-lite.js",
+  "obfuscated": true,
+  "backend": "https://esflzekalynjgwmjsgil.supabase.co",
+  "assets": {
+    "app": "app.7.64.39.c3951fd8925d.js",
+    "runtime": "runtime.7.64.39.26bc0e1375c7.js",
+    "styles": "styles.css",
+    "oauth": "oauth/index.html",
+    "oauthScript": "oauth/oauth.js",
+    "signin": "signin/index.html",
+    "signinScript": "signin/signin.js"
+  },
+  "builtAt": "2026-09-15T19:45:53.385Z"
+}

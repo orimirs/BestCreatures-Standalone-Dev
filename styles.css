@@ -1,0 +1,322 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #070b12;
+  color: #e8f1fb;
+}
+
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; overflow-x: hidden; background: #070b12; }
+button { font: inherit; }
+
+#standalone-shell {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 24vw, 390px);
+  background: #05070b;
+  overflow: hidden;
+}
+
+#standalone-watch { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+#standalone-player { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
+#standalone-video-anchor { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+#standalone-native-player { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+
+/* Channel / control tray: mobile-only. Desktop keeps the runtime sidebar
+   inside the player, so the host tray stays hidden there. */
+#standalone-controls { display: none; }
+
+#standalone-chat {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0e0e10;
+  border-left: 1px solid rgba(148, 190, 225, .2);
+}
+#standalone-chat[hidden] { display: none; }
+#standalone-chat header {
+  flex: 0 0 42px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px 0 12px;
+  color: #dbeafe;
+  background: linear-gradient(180deg, #111a25, #0b1119);
+  border-bottom: 1px solid rgba(148, 190, 225, .18);
+  font-size: 12px;
+}
+.standalone-chat-spacer { flex: 1; }
+#standalone-chat-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#standalone-chat header button { flex: 0 0 auto; white-space: nowrap; }
+#standalone-chat button, #standalone-chat-open, #boot-retry {
+  border: 1px solid rgba(125, 211, 252, .28);
+  border-radius: 7px;
+  padding: 6px 9px;
+  color: #dff7ff;
+  background: rgba(56, 189, 248, .09);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+}
+#standalone-chat button:hover, #standalone-chat-open:hover, #boot-retry:hover { background: rgba(56, 189, 248, .2); }
+#standalone-chat-frame { flex: 1 1 auto; width: 100%; min-height: 0; border: 0; background: #0e0e10; }
+#standalone-chat-open { position: absolute; z-index: 2147483600; top: 10px; right: 54px; }
+.standalone-chat-hidden #standalone-shell { grid-template-columns: minmax(0, 1fr); }
+
+.standalone-message {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at 20% 0%, rgba(56, 189, 248, .14), transparent 55%), #070b12;
+}
+.standalone-message[hidden] { display: none; }
+#standalone-player > .standalone-message { position: absolute; z-index: 20; }
+.standalone-card {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  color: #dbeafe;
+  background: rgba(12, 20, 32, .94);
+  border: 1px solid rgba(125, 211, 252, .22);
+  border-radius: 14px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, .6);
+}
+.standalone-card span { color: #94a3b8; font-size: 13px; }
+.standalone-spinner { width: 28px; height: 28px; border: 3px solid rgba(56, 189, 248, .2); border-top-color: #38bdf8; border-radius: 50%; animation: standalone-spin .8s linear infinite; }
+.standalone-noscript { margin: 0; padding: 24px; }
+@keyframes standalone-spin { to { transform: rotate(360deg); } }
+
+/* Mobile vertical layout: 16:9 player on top, compact channel tray,
+   then chat filling the remaining height. No full-screen drawer. */
+@media (max-width: 900px) and (orientation: portrait) {
+  #standalone-shell {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    overflow-x: hidden;
+  }
+  .standalone-chat-hidden #standalone-shell { grid-template-columns: none; }
+
+  #standalone-watch {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: visible;
+    background: #000;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  /* !important beats the shared runtime's inline player prep
+     (position:absolute; inset:0; width/height:100% on the container). */
+  #standalone-player {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    flex: 0 0 auto !important;
+    overflow: hidden !important;
+    background: #000;
+  }
+  #standalone-player > .standalone-message { position: absolute; }
+
+  /* Channel / control tray is disabled: standalone mode uses the Discord vertical channel rail inside the player across all devices. */
+  #standalone-controls { display: none !important; }
+
+  /* Chat fills the remaining height below the player. */
+  #standalone-chat {
+    position: static;
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    max-width: 100vw;
+    border-left: 0;
+    border-top: 1px solid rgba(148, 190, 225, .16);
+    box-shadow: none;
+    z-index: 1;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  #standalone-chat header { flex: 0 0 44px; font-size: 12px; }
+  #standalone-chat header button {
+    min-height: 36px;
+    min-width: 44px;
+    font-size: 12px;
+  }
+  #standalone-chat-frame {
+    flex: 1 1 auto;
+    min-height: 120px;
+    width: 100%;
+    max-width: 100vw;
+  }
+  /* Show-chat becomes an in-flow button below the tray, not a video overlay. */
+  #standalone-chat-open {
+    position: static;
+    z-index: 1;
+    margin: 8px;
+    align-self: stretch;
+    min-height: 40px;
+  }
+  #standalone-chat-open[hidden] { display: none; }
+
+  /* MAIN 3 / Anime browse catalog takes over full viewport on portrait mobile */
+  html[data-bajsas-standalone="1"] .bajsas-main3-browse {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+  }
+}
+
+/* Common mobile & small screen dialog/popover/media-bar rules */
+html[data-bajsas-standalone="1"] #custom-stream-wrapper .bajsas-media-bar {
+  flex-wrap: wrap !important;
+  row-gap: 6px !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+html[data-bajsas-standalone="1"] #custom-stream-wrapper .bajsas-media-input-island {
+  flex: 1 1 100% !important;
+  min-width: 0 !important;
+}
+html[data-bajsas-standalone="1"] #custom-stream-wrapper .bajsas-media input {
+  font-size: 16px !important;
+}
+
+html[data-bajsas-standalone="1"] .bajsas-expand-panel {
+  display: none;
+  position: fixed;
+  z-index: 2147483646;
+  left: 8px !important;
+  right: 8px !important;
+  top: 8px !important;
+  bottom: auto !important;
+  width: auto !important;
+  max-width: calc(100vw - 16px) !important;
+  max-height: calc(100vh - 16px) !important;
+  max-height: calc(100dvh - 16px) !important;
+  overflow: auto;
+  background: #1f1f23;
+  border: 1px solid rgba(69, 70, 85, .45);
+  border-radius: 12px;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .55);
+  color: #e3e2e6;
+}
+html[data-bajsas-standalone="1"] .bajsas-expand-panel.show { display: block; }
+html[data-bajsas-standalone="1"] .bajsas-media-queue-list {
+  left: 8px !important;
+  right: 8px !important;
+  top: 8px !important;
+  width: auto !important;
+  max-width: calc(100vw - 16px) !important;
+}
+html[data-bajsas-standalone="1"] .bajsas-7tv-vault {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  left: 8px !important;
+  right: 8px !important;
+  top: 8px !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: calc(100vw - 16px) !important;
+  max-height: calc(100vh - 16px) !important;
+  max-height: calc(100dvh - 16px) !important;
+  overflow-y: auto !important;
+}
+
+/* Landscape on phones and short viewports (e.g. 780x360 S24, 844x390 iPhone 14, 667x375 iPhone SE):
+   Side-by-side grid, player height constrained to viewport (no overflow/clipping),
+   compact channel rail and chat. */
+@media (orientation: landscape) and (max-height: 600px) {
+  #standalone-shell {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 26vw, 300px) !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+  }
+  .standalone-chat-hidden #standalone-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  #standalone-watch {
+    position: relative !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  #standalone-player {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    max-height: 100dvh !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+    background: #000 !important;
+  }
+  #standalone-controls { display: none !important; }
+  #standalone-chat {
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    border-left: 1px solid rgba(148, 190, 225, .2) !important;
+    border-top: 0 !important;
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  #standalone-chat header { flex: 0 0 36px !important; font-size: 11px !important; }
+  #standalone-chat header button { min-height: 28px !important; padding: 4px 7px !important; font-size: 11px !important; }
+  #standalone-chat-open {
+    position: absolute !important;
+    z-index: 2147483600 !important;
+    top: 8px !important;
+    right: 54px !important;
+    margin: 0 !important;
+    min-height: 32px !important;
+  }
+  .bajsas-poster-preview-card img {
+    max-height: calc(100dvh - 20px) !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) { .standalone-spinner { animation: none; } }

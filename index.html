@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-bajsas-standalone="1">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="description" content="BajSAS channels with the original BajSAS controls and embedded Twitch chat.">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src https: blob:; connect-src 'self' https: wss:; frame-src https://player.twitch.tv https://www.twitch.tv https://player.kick.com https://player.angelthump.com https://www.youtube-nocookie.com https://www.youtube.com https://cinesrc.st https://vixsrc.to https://vidfast.vc https://vidfast.pro https://vidfast.in https://vidfast.io https://vidfast.me https://vidfast.net https://vidfast.pm https://vidfast.xyz https://vidfast.bz https://anime-nexus-blue.vercel.app https://megaplay.buzz https://www.megaplay.buzz https://vidtube.site https://www.vidtube.site; object-src 'none'; base-uri 'self'; frame-ancestors 'self';">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+  <title>BajSAS Channels</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <noscript><p class="standalone-noscript">BajSAS Channels needs JavaScript.</p></noscript>
+  <main id="standalone-shell" aria-label="BajSAS channels">
+    <section id="standalone-watch" aria-label="Player">
+      <div id="standalone-player" class="video-player">
+        <!-- The shared bookmarklet runtime uses this local video as its stable
+             player anchor and moves the native-player iframe into its wrapper. -->
+        <video id="standalone-video-anchor" muted playsinline aria-hidden="true"></video>
+        <iframe
+          id="standalone-native-player"
+          class="native-player"
+          title="Twitch player"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+        <div id="standalone-loading" class="standalone-message" role="status">
+          <div class="standalone-card">
+            <span class="standalone-spinner" aria-hidden="true"></span>
+            <strong>Loading BajSAS…</strong>
+            <span>The original app is starting inside the embedded player.</span>
+          </div>
+        </div>
+      </div>
+      <div id="standalone-controls" aria-label="Channels and player controls">
+        <button id="standalone-channels-toggle" type="button" aria-expanded="false" aria-controls="standalone-controls-tray">
+          <span class="standalone-channels-toggle-label">Channels</span>
+          <span id="standalone-current-channel" class="standalone-current-channel" aria-live="polite">MAIN</span>
+          <span class="standalone-channels-toggle-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div id="standalone-controls-tray" hidden></div>
+      </div>
+      <button id="standalone-chat-open" type="button" hidden>Show chat</button>
+    </section>
+    <aside id="standalone-chat" aria-label="Twitch chat">
+      <header>
+        <strong id="standalone-chat-title">Twitch chat</strong>
+        <span class="standalone-chat-spacer"></span>
+        <button id="standalone-chat-reload" type="button">Reload</button>
+        <button id="standalone-chat-hide" type="button">Hide chat</button>
+      </header>
+      <iframe
+        id="standalone-chat-frame"
+        title="Twitch chat"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+    </aside>
+  </main>
+  <div id="boot-error" class="standalone-message" hidden>
+    <div class="standalone-card">
+      <strong>Something went wrong</strong>
+      <span id="boot-error-text">BajSAS could not start.</span>
+      <button id="boot-retry" type="button">Retry</button>
+    </div>
+  </div>
+  <script type="application/json" id="standalone-config">{"appVersion":"7.64.39","appBuild":"2026-09-15-standalone-vertical-menu-touch-unification","environment":"dev","runtimeAsset":"./runtime.7.64.39.26bc0e1375c7.js","supabaseUrl":"https://esflzekalynjgwmjsgil.supabase.co","supabasePublishableKey":"sb_publishable_FsGCo2WV9QGSnYRm0Thz4Q_aK20emu4","twitchChatChannel":"bestestcreaturesallowed"}</script>
+  <script src="./app.7.64.39.c3951fd8925d.js" defer></script>
+</body>
+</html>

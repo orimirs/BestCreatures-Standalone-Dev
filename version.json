@@ -1,0 +1,19 @@
+{
+  "version": "7.67.5",
+  "build": "2026-09-19-channels-menu-chat-gifs-polish",
+  "environment": "dev",
+  "architecture": "shared-bookmarklet-runtime",
+  "runtimeSource": "bajsas-lite.js",
+  "obfuscated": true,
+  "backend": "https://esflzekalynjgwmjsgil.supabase.co",
+  "assets": {
+    "app": "app.7.67.5.a0633a3b2fbf.js",
+    "runtime": "runtime.7.67.5.2a2faf5e1a36.js",
+    "styles": "styles.css",
+    "oauth": "oauth/index.html",
+    "oauthScript": "oauth/oauth.js",
+    "signin": "signin/index.html",
+    "signinScript": "signin/signin.js"
+  },
+  "builtAt": "2026-09-19T18:17:12.136Z"
+}

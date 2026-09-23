@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https:; object-src 'none'; base-uri 'self';">
+  <title>BajSAS sign in</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0b1220;color:#e8eef7;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:16px;box-sizing:border-box}
+    .box{width:min(400px,100%);background:#101722;border:1px solid #3a5170;border-radius:15px;padding:24px;box-shadow:0 28px 70px rgba(0,0,0,.82)}
+    h1{font-size:19px;margin:0 0 4px;letter-spacing:-.02em}
+    .sub{font-size:12.5px;color:#94a0af;margin:0 0 16px;line-height:1.5}
+    .twitch{width:100%;height:42px;border:0;border-radius:9px;background:#a970ff;color:#fff;font-size:13px;font-weight:800;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    .twitch:disabled,.words-btn:disabled,.ghost:disabled{opacity:.55;cursor:default}
+    .divider{display:flex;align-items:center;gap:8px;margin:14px 0;color:#748294;font-size:10px;font-weight:800;letter-spacing:.1em}
+    .divider::before,.divider::after{content:"";height:1px;flex:1;background:rgba(255,255,255,.09)}
+    .words{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+    .words input{min-width:0;width:100%;height:38px;padding:0 10px;border:1px solid rgba(255,255,255,.12);border-radius:7px;background:#070b12;color:#eef5fa;font-size:16px;outline:none;box-sizing:border-box}
+    .words-btn{grid-column:1/-1;height:37px;border:1px solid #40516a;border-radius:7px;background:#1a2737;color:#e1edf7;font-size:12px;font-weight:800;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    .status{grid-column:1/-1;min-height:16px;color:#ffadb7;font-size:11px;text-align:center}
+    .status.ok{color:#a9f5e3}
+    .code{width:100%;height:38px;margin-top:8px;padding:0 10px;border:1px dashed rgba(255,255,255,.25);border-radius:7px;background:#070b12;color:#eef5fa;font-size:16px;box-sizing:border-box}
+    .row{display:flex;gap:8px;margin-top:10px}
+    .ghost{flex:1;height:37px;border:1px solid #40516a;border-radius:7px;background:transparent;color:#e1edf7;font-size:12px;font-weight:700;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    .primary{flex:1;height:37px;border:0;border-radius:7px;background:#38bdf8;color:#04222f;font-size:12px;font-weight:800;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    .note{margin-top:12px;color:#788798;font-size:10.5px;line-height:1.5;text-align:center}
+    .who{font-size:13px;margin-bottom:12px}
+    .who b{color:#7dd3fc}
+    [hidden]{display:none !important}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div id="panel-error" hidden>
+      <h1>Sign-in link invalid</h1>
+      <p class="sub">This sign-in window was opened without a valid request. Close it, return to the player, and choose Sign in again.</p>
+      <div class="row"><button id="error-close" class="ghost" type="button">Close</button></div>
+    </div>
+    <div id="panel-continue" hidden>
+      <h1>Sign in</h1>
+      <p class="sub">You are already signed in on this site.</p>
+      <p class="who">Continue as <b id="continue-name">…</b>?</p>
+      <div class="row">
+        <button id="continue-no" class="ghost" type="button">Use another account</button>
+        <button id="continue-yes" class="primary" type="button">Continue</button>
+      </div>
+      <p class="note">Signing out here does not sign you out on Twitch.</p>
+    </div>
+    <div id="panel-login" hidden>
+      <h1>Sign in to BajSAS</h1>
+      <p class="sub">One sign-in works on both the player page and Twitch. Your points and requests carry over.</p>
+      <button id="hub-twitch" class="twitch" type="button">Continue with Twitch</button>
+      <div id="hub-status" class="status" role="alert"></div>
+      <p class="note">Your Twitch account keeps your role, points, requests, and history.<br>Signing out here does not sign you out on Twitch.</p>
+    </div>
+    <div id="panel-done" hidden>
+      <h1>Signed in</h1>
+      <p class="sub" id="done-text">You are signed in. Return to the player — it will pick up your sign-in automatically.</p>
+      <input id="done-code" class="code" type="text" readonly aria-label="Fallback sign-in code">
+      <div class="row">
+        <button id="done-copy" class="ghost" type="button">Copy code</button>
+        <button id="done-close" class="primary" type="button">Return to player</button>
+      </div>
+      <p class="note">If the player did not sign you in (for example on a phone where this opened in a new tab), copy the code and paste it into the player sign-in window.</p>
+    </div>
+  </div>
+  <script type="application/json" id="standalone-config">{"appVersion":"7.69.0","appBuild":"2026-09-24-esmodule-architecture","environment":"dev","runtimeAsset":"./runtime.7.69.0.e36e439acc7e.js","supabaseUrl":"https://esflzekalynjgwmjsgil.supabase.co","supabasePublishableKey":"sb_publishable_FsGCo2WV9QGSnYRm0Thz4Q_aK20emu4","twitchChatChannel":"bestestcreaturesallowed"}</script>
+  <script src="./signin.js" defer></script>
+</body>
+</html>
